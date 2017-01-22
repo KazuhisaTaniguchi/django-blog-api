@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import (
     CommentCreateAPIView,
     CommentListAPIView,
-    CommentDetailAPIView
+    CommentDetailAPIView,
 )
 
 urlpatterns = [

@@ -11,4 +11,4 @@ class PostLimitOffsetPagination(LimitOffsetPagination):
 
 class PostPageNumberPagination(PageNumberPagination):
     # １ページに何件表示するか
-    page_size = 2
+    page_size = 20
