@@ -14,7 +14,7 @@ from rest_framework.generics import (
 )
 
 from rest_framework.permissions import (
-    # AllowAny,
+    AllowAny,
     IsAuthenticated,
     # IsAdminUser,
     IsAuthenticatedOrReadOnly
@@ -34,7 +34,7 @@ from .serializers import (
 class PostCreateAPIView(CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreateSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -45,13 +45,14 @@ class PostDetailAPIView(RetrieveAPIView):
     serializer_class = PostDetailSerializer
     lookup_field = "slug"
     # lookup_url_kwarg = "slug"
+    permission_classes = [AllowAny]
 
 
 class PostUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
     lookup_field = "slug"
-    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = [IsOwnerOrReadOnly]
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
@@ -61,6 +62,7 @@ class PostDeleteAPIView(DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
     lookup_field = "slug"
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class PostListAPIView(ListAPIView):
@@ -70,6 +72,8 @@ class PostListAPIView(ListAPIView):
     search_fields = ['title', 'content', 'user__first_name']
     # ページネーションの処理
     pagination_class = PostPageNumberPagination
+    lookup_field = "slug"
+    permission_classes = [AllowAny]
 
     def get_queryset(self, *args, **kwargs):
         queryset_list = Post.objects.all()
